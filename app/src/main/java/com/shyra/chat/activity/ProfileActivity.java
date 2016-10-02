@@ -1,4 +1,4 @@
-package com.shyra.chat.activities;
+package com.shyra.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

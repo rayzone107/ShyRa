@@ -18,4 +18,7 @@
     <color name="fab_normal">@color/colorAccent</color>
     <color name="fab_pressed">#C94116</color>
     <color name="fab_ripple">#C94116</color>
+
+    <!-- Border Colours -->
+    <color name="timeline_image_border">#8f8f8f</color>
 </resources>

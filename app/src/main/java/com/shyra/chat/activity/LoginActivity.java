@@ -1,4 +1,4 @@
-package com.shyra.chat.activities;
+package com.shyra.chat.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -188,6 +188,21 @@ public class LoginActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         handleFacebookAccessToken(loginResult.getAccessToken());
+                        /*Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,link,email,cover, birthday, gender");
+                        parameters.putString("edges", "picture");
+
+                        new GraphRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                "/" + loginResult.getAccessToken().getUserId(),
+                                parameters,
+                                HttpMethod.GET,
+                                new GraphRequest.Callback() {
+                                    public void onCompleted(GraphResponse response) {
+                                        response.getRawResponse();
+                                    }
+                                }
+                        ).executeAsync();*/
                     }
 
                     @Override

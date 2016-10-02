@@ -6,4 +6,7 @@ package com.shyra.chat.helper;
  */
 
 public class Constants {
+    public interface DIMENSIONS {
+        int TIMELINE_RV_TOP_SPACING = 48;
+    }
 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.shyra.chat.activities.MainActivity">
+    tools:context="com.shyra.chat.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,6 +22,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_main" />
+
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -32,7 +34,5 @@
         fab:fab_colorNormal="@color/fab_normal"
         fab:fab_colorPressed="@color/fab_pressed"
         fab:fab_colorRipple="@color/fab_ripple" />
-
-    <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>
