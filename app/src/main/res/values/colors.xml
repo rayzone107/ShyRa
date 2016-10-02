@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#FF5722</color>
+
+    <color name="hint_color">#ececec</color>
+
+    <!-- Logo Colours -->
+    <color name="facebook_icon">#3b5998</color>
+    <color name="google_icon">#d0422a</color>
+
+    <!-- Background Colours -->
+    <color name="login_card_bg">#33ffffff</color>
+    <color name="dialog_bg">#00000000</color>
+
+    <!-- Floating Action Button Colours-->
+    <color name="fab_normal">@color/colorAccent</color>
+    <color name="fab_pressed">#C94116</color>
+    <color name="fab_ripple">#C94116</color>
+</resources>

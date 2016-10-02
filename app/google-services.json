@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "268645273061",
+    "firebase_url": "https://private-chat-f89d1.firebaseio.com",
+    "project_id": "private-chat-f89d1",
+    "storage_bucket": "private-chat-f89d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268645273061:android:b8c357b2df5699a2",
+        "android_client_info": {
+          "package_name": "com.shyra.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268645273061-akgoo4d5ejolk1k7jl68r9vpe1kmqnlu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shyra.chat",
+            "certificate_hash": "E985AEEF693BF22C1804DEB8F257194F6E97A1A8"
+          }
+        },
+        {
+          "client_id": "268645273061-n8s9o2ptjd091i02703o0l74geo8nim7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjcYsiUI34PZUWu15nMUBjO8Hxc_jItJw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268645273061-n8s9o2ptjd091i02703o0l74geo8nim7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

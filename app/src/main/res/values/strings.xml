@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">ShyRa</string>
+
+    <!-- Button Titles -->
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+
+    <!-- TextView Content -->
+    <string name="log_in_with">Log in with:</string>
+    <string name="or">OR</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+
+    <!-- EditText Hints/Text -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!-- Image Content Description -->
+    <string name="shyra_logo">ShyRa Logo</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">646082745567765</string>
+    <string name="fb_login_protocol_scheme">fb646082745567765</string>
+
+    <!-- Menu Item Text -->
+    <string name="sign_out">Sign Out</string>
+    <string name="profile">Profile</string>
+</resources>
