@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TimelineSeparatorView">
-        <attr name="viewColor" format="color"/>
-        <attr name="viewLabel" format="string"/>
-        <attr name="labelColor" format="color"/>
+        <attr name="topCircleFillColor" format="color" />
+        <attr name="topCircleWidth" format="dimension" />
+        <attr name="topCircleBorderColor" format="color" />
+        <attr name="topCircleBorderWidth" format="dimension" />
+        <attr name="topCircleCenterDotColor" format="color" />
+        <attr name="topCircleCenterDotWidth" format="dimension" />
+
+        <attr name="bottomCircleFillColor" format="color" />
+        <attr name="bottomCircleWidth" format="dimension" />
+        <attr name="bottomCircleBorderColor" format="color" />
+        <attr name="bottomCircleBorderWidth" format="dimension" />
+        <attr name="bottomCircleCenterDotColor" format="color" />
+        <attr name="bottomCircleCenterDotWidth" format="dimension" />
+
+        <attr name="connectorLineColor" format="color" />
+        <attr name="connectorLineWidth" format="dimension" />
+        <attr name="direction" format="boolean" /> <!-- True for left, false for right-->
+
     </declare-styleable>
 </resources>

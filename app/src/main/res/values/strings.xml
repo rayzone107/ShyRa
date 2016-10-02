@@ -26,4 +26,9 @@
     <!-- Menu Item Text -->
     <string name="sign_out">Sign Out</string>
     <string name="profile">Profile</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
 </resources>

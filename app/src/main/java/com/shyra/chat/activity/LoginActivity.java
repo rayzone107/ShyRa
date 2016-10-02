@@ -117,20 +117,20 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @OnClick(R.id.login_facebook_btn)
-    void onLoginFacebookClicked() {
+    void onLoginFacebookClick() {
         showProgress();
         mLoginFacebookOriginalButton.performClick();
     }
 
     @OnClick(R.id.login_google_btn)
-    void onLoginGoogleClicked() {
+    void onLoginGoogleClick() {
         showProgress();
         Intent googleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(googleSignInIntent, RC_GOOGLE_SIGN_IN);
     }
 
     @OnClick(R.id.sign_up_btn)
-    void onSingUpEmailClicked() {
+    void onSingUpEmailClick() {
         showProgress();
         String email = mUserEmailET.getText().toString();
         String password = mUserPasswordET.getText().toString();
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @OnClick(R.id.login_btn)
-    void onLoginEmailClicked() {
+    void onLoginEmailClick() {
         showProgress();
         String email = mUserEmailET.getText().toString();
         String password = mUserPasswordET.getText().toString();
@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @OnClick(R.id.forgot_password_tv)
-    void onForgotPasswordClicked() {
+    void onForgotPasswordClick() {
         if (Helper.isEmailValid(mUserEmailET.getText().toString())) {
             mFirebaseAuth.sendPasswordResetEmail(mUserEmailET.getText().toString());
             Toast.makeText(this, "An Email has been sent to the Email ID above. It contains the Reset Password link.", Toast.LENGTH_SHORT).show();

@@ -24,15 +24,33 @@
 
     <include layout="@layout/content_main" />
 
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/fab"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/ic_add"
         fab:fab_colorNormal="@color/fab_normal"
         fab:fab_colorPressed="@color/fab_pressed"
-        fab:fab_colorRipple="@color/fab_ripple" />
+        fab:fab_colorRipple="@color/fab_ripple">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/timeline_upload_media_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_upload_media"
+            app:fab_label="Upload Media"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/timeline_add_event_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_event"
+            app:fab_label="Add New Event"
+            app:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
