@@ -18,6 +18,7 @@
     <color name="timeline_click_bg">#e7e7e7</color>
     <color name="add_event_camera_bg">#c9c3b9</color>
     <color name="add_event_camera_bg_clicked">#9c968c</color>
+    <color name="fab_menu_bg">#64000000</color>
 
     <!-- Floating Action Button Colours-->
     <color name="fab_normal">@color/colorPrimary</color>

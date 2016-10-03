@@ -97,6 +97,7 @@ public class AddEventActivity extends AppCompatActivity {
         if (mFirebaseUser == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+            return;
         }
 
         File folder = new File(mFolderPath);

@@ -244,9 +244,8 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void launchMainActivity() {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, TimelineActivity.class));
         finish();
-
     }
 
     private void handleFacebookAccessToken(AccessToken token) {

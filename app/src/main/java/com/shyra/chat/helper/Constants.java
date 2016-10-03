@@ -28,4 +28,8 @@ public class Constants {
             String IMAGE = "image";
         }
     }
+
+    public interface EXTRA {
+        String TIMELINE_EVENT = "timeline_event";
+    }
 }

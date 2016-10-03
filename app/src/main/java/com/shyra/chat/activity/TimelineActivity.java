@@ -2,12 +2,15 @@ package com.shyra.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,15 +30,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = TimelineActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     @BindView(R.id.fab_menu)
-    FloatingActionMenu mFab;
+    FloatingActionMenu mFabMenu;
 
     @BindView(R.id.timeline_add_event_fab)
     FloatingActionButton mTimelineAddEventFab;
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_timeline);
 
         ButterKnife.bind(this);
 
@@ -69,20 +72,25 @@ public class MainActivity extends AppCompatActivity {
         if (mFirebaseUser == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+            return;
         }
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mFirebaseAdapter = new TimelineAdapter(
                 TimelineEvent.class,
                 R.layout.rv_timeline_row_left,
                 TimelineAdapter.TimelineHolder.class,
-                mFirebaseDatabaseReference.child(Constants.DATABASE_HEADERS.TIMELINE_EVENT)) {
-
+                mFirebaseDatabaseReference.child(Constants.DATABASE_HEADERS.TIMELINE_EVENT), new TimelineAdapter.OnItemClickListener() {
             @Override
-            protected void populateViewHolder(TimelineHolder viewHolder, TimelineEvent timelineEvent, int position) {
-                viewHolder.bind(getApplicationContext(), timelineEvent, position == getItemCount() - 1);
+            public void onItemClick(TimelineEvent timelineEvent, View transitionImage, View transitionTitle) {
+                Intent intent = new Intent(TimelineActivity.this, EventDetailActivity.class);
+                intent.putExtra(Constants.EXTRA.TIMELINE_EVENT, timelineEvent);
+                Pair<View, String> p1 = Pair.create(transitionImage, getString(R.string.transition_event_image));
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(TimelineActivity.this, p1);
+                startActivity(intent, options.toBundle());
             }
-        };
+        });
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
@@ -109,13 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.timeline_add_event_fab)
     public void onAddEventClick() {
-        startActivity(new Intent(this, AddEventActivity.class));
-        mFab.close(true);
+        Intent intent = new Intent(this, AddEventActivity.class);
+        startActivity(intent);
+        mFabMenu.close(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
         return true;
     }
 
@@ -125,18 +134,27 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_profile:
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                startActivity(new Intent(TimelineActivity.this, ProfileActivity.class));
                 break;
             case R.id.action_sign_out:
                 if (mFirebaseUser != null) {
                     mFirebaseAuth.signOut();
                     LoginManager.getInstance().logOut();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(TimelineActivity.this, LoginActivity.class));
                     finish();
                     return true;
                 }
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mFabMenu.isOpened()) {
+            mFabMenu.close(true);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
