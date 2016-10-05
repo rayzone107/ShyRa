@@ -1,113 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_add_event"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context="com.shyra.chat.activity.AddEventActivity">
+    android:background="@android:color/white">
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
+        android:id="@+id/activity_add_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        tools:context="com.shyra.chat.activity.AddEventActivity">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/add_event_cancel_button"
-                style="?android:attr/buttonBarButtonStyle"
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary">
+
+                <Button
+                    android:id="@+id/add_event_cancel_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="10dp"
+                    android:minWidth="150dp"
+                    android:paddingEnd="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingStart="15dp"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary">
+
+                <Button
+                    android:id="@+id/add_event_save_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="10dp"
+                    android:minWidth="150dp"
+                    android:paddingEnd="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingStart="15dp"
+                    android:text="@string/save"
+                    android:textColor="@android:color/white" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="240dp">
+
+            <ImageView
+                android:id="@+id/add_event_backdrop_select_iv"
+                style="?android:buttonBarButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="10dp"
-                android:minWidth="150dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:text="@string/cancel"
-                android:textColor="@android:color/white" />
-        </FrameLayout>
+                android:layout_height="200dp"
+                android:clickable="true"
+                android:padding="0dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/timeline_placeholder" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary">
+            <ImageView
+                android:id="@+id/add_event_backdrop_select_marker_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="12dp"
+                android:clickable="true"
+                android:src="@drawable/ic_edit"
+                app:layout_anchor="@id/add_event_backdrop_select_iv"
+                app:layout_anchorGravity="bottom|right" />
 
-            <Button
-                android:id="@+id/add_event_save_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="10dp"
-                android:minWidth="150dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:text="@string/save"
-                android:textColor="@android:color/white" />
-        </FrameLayout>
-    </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/add_event_image_select_iv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/add_event_camera_bg"
+                android:clickable="true"
+                android:padding="15dp"
+                android:src="@drawable/ic_camera"
+                app:layout_anchor="@id/add_event_backdrop_select_iv"
+                app:layout_anchorGravity="bottom|left" />
+        </android.support.design.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/add_event_image_select_iv"
-            android:layout_width="60dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/add_event_camera_bg"
-            android:clickable="true"
-            android:padding="15dp"
-            android:src="@drawable/ic_camera" />
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/add_event_title_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:hint="@string/title"
+                android:maxLines="1"
+                android:textColorHint="@color/add_event_hint_color"
+                app:layout_anchor="@id/add_event_image_select_iv" />
+
+            <ImageView
+                android:id="@+id/add_event_color_picker_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/ic_color_pick" />
+
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/add_event_title_et"
+            android:id="@+id/add_event_description_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:hint="@string/title"
+            android:layout_marginStart="20dp"
+            android:gravity="bottom"
+            android:hint="@string/description"
+            android:minLines="3"
             android:textColorHint="@color/add_event_hint_color" />
 
+        <EditText
+            android:id="@+id/add_event_date_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:hint="@string/date"
+            android:maxLines="1"
+            android:textColorHint="@color/add_event_hint_color"
+            tools:ignore="TextFields" />
+
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/add_event_description_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:gravity="bottom"
-        android:hint="@string/description"
-        android:minLines="3"
-        android:textColorHint="@color/add_event_hint_color" />
-
-    <EditText
-        android:id="@+id/add_event_date_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="@string/date"
-        android:textColorHint="@color/add_event_hint_color"
-        tools:ignore="TextFields" />
-
-</LinearLayout>
+</ScrollView>

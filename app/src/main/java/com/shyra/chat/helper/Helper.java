@@ -1,5 +1,9 @@
 package com.shyra.chat.helper;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +17,7 @@ public class Helper {
     /**
      * method is used for checking valid email id format.
      *
-     * @param email
+     * @param email The string contaning the email ID.
      * @return boolean true for valid false for invalid
      */
     public static boolean isEmailValid(String email) {
@@ -28,5 +32,17 @@ public class Helper {
             isValid = true;
         }
         return isValid;
+    }
+
+    /**
+     * Convert a dp value to it's corresponding pixels.
+     *
+     * @param context The context for the application
+     * @param dpValue The dp value that needs to be converted into pixels
+     * @return The converted value in pixels.
+     */
+    public static float dpToPixels(Context context, float dpValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, metrics);
     }
 }

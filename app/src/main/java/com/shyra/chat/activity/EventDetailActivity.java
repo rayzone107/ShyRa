@@ -21,6 +21,7 @@ import com.shyra.chat.model.TimelineEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -34,6 +35,9 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.event_detail_backdrop_iv)
     ImageView mEventDetailBackdropIV;
+
+    @BindView(R.id.event_detail_image_iv)
+    CircleImageView mEventDetailImageIV;
 
     @BindView(R.id.event_detail_title_tv)
     TextView mEventDetailTitleTV;
@@ -53,7 +57,12 @@ public class EventDetailActivity extends AppCompatActivity {
 //        mToolbarLayout.setTitle(mTimelineEvent.getTitle());
 
         Glide.with(this).load(mTimelineEvent.getImageUrl())
-                .placeholder(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))).into(mEventDetailBackdropIV);
+                .placeholder(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)))
+                .into(mEventDetailImageIV);
+
+        Glide.with(this).load(mTimelineEvent.getBackdropUrl())
+                .placeholder(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)))
+                .into(mEventDetailBackdropIV);
 
         mEventDetailTitleTV.setText(mTimelineEvent.getTitle());
         mEventDetailTitleTV.setTextColor(mTimelineEvent.getColor());

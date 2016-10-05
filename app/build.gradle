@@ -73,8 +73,12 @@ dependencies {
 
 //  Circle Image View
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
 
 //  Simple Shared Preferences
     compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
+
+//  Color Picker
+    compile 'com.pes.materialcolorpicker:library:1.0.2'
 }
 apply plugin: 'com.google.gms.google-services'

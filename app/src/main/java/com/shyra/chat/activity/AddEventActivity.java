@@ -14,21 +14,29 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.shyra.chat.R;
 import com.shyra.chat.helper.Constants;
+import com.shyra.chat.helper.Helper;
 import com.shyra.chat.model.TimelineEvent;
 
 import java.io.ByteArrayOutputStream;
@@ -44,17 +52,31 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    private static final String TAG = AddEventActivity.class.getSimpleName();
+
+    private static final int REQUEST_CODE_IMAGE_SELECT = 10;
+    private static final int REQUEST_CODE_BACKDROP_SELECT = 11;
+
     @BindView(R.id.add_event_cancel_button)
     Button mAddEventCancelButton;
 
     @BindView(R.id.add_event_save_button)
     Button mAddEventSaveButton;
 
+    @BindView(R.id.add_event_backdrop_select_iv)
+    ImageView mAddEventBackdropSelectIV;
+
+    @BindView(R.id.add_event_backdrop_select_marker_iv)
+    ImageView mAddEventBackdropSelectMarkerIV;
+
     @BindView(R.id.add_event_image_select_iv)
     CircleImageView mAddEventImageSelectIV;
 
     @BindView(R.id.add_event_title_et)
     EditText mAddEventTitleET;
+
+    @BindView(R.id.add_event_color_picker_iv)
+    ImageView mAddEventColorPickerIV;
 
     @BindView(R.id.add_event_description_et)
     EditText mAddEventDescriptionET;
@@ -72,9 +94,13 @@ public class AddEventActivity extends AppCompatActivity {
     private String mFolderPath = Constants.LOCAL_STORAGE_PATHS.EVENT_IMAGE_PATH;
     private File mFile;
 
-    private Bitmap mImageBitmap;
+    private Bitmap mImageBitmap, mBackdropBitmap;
 
-    private TimelineEvent mTimelineEvent;
+    private ColorPicker mColorPicker;
+    boolean mIsColorSet = false;
+    int mSelectedColor;
+
+    private String mTimelineEventKey = "0";
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -102,7 +128,8 @@ public class AddEventActivity extends AppCompatActivity {
 
         File folder = new File(mFolderPath);
         folder.mkdirs();
-        mFile = new File(folder.getPath() + "/tempEventImage.jpg");
+        mFile = new File(folder.getPath() + "/tempImage.jpg");
+        mColorPicker = new ColorPicker(this);
     }
 
     @OnClick(R.id.add_event_save_button)
@@ -115,40 +142,58 @@ public class AddEventActivity extends AppCompatActivity {
             mAddEventDateET.setError("Cannot be blank");
             return;
         }
-        Random rnd = new Random();
-        final int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        final String[] imageUrl = {""};
-        if (mImageBitmap != null) {
-            mStorageReference = mFirebaseStorage.getReference().child(Constants.SERVER_STORAGE_HIERARCHY.EVENT)
-                    .child(Constants.SERVER_STORAGE_HIERARCHY.EVENT_PATH.IMAGE).child(mAddEventTitleET.getText().toString());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-            UploadTask uploadTask = mStorageReference.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddEventActivity.this, "Unable to save. Please try again.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageUrl[0] = taskSnapshot.getDownloadUrl().toString();
-                    mTimelineEvent = new TimelineEvent(mAddEventTitleET.getText().toString(),
-                            mAddEventDescriptionET.getText().toString(), imageUrl[0], mAddEventDateET.getText().toString(),
-                            color);
-                    mFirebaseDatabaseReference.child(Constants.DATABASE_HEADERS.TIMELINE_EVENT).push().setValue(mTimelineEvent);
-                    finish();
-                }
-            });
-        } else {
-            mTimelineEvent = new TimelineEvent(mAddEventTitleET.getText().toString(),
-                    mAddEventDescriptionET.getText().toString(), imageUrl[0], mAddEventDateET.getText().toString(),
-                    color);
+        if (!mIsColorSet) {
+            Random rnd = new Random();
+            mSelectedColor = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         }
-        mFirebaseDatabaseReference.child(Constants.DATABASE_HEADERS.TIMELINE_EVENT).push().setValue(mTimelineEvent);
-        finish();
+
+        mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                TimelineEvent timelineEvent;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    mTimelineEventKey = String.valueOf(postSnapshot.getValue(TimelineEvent.class).getId() + 1);
+                }
+                mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT).child(mTimelineEventKey).push();
+                timelineEvent = new TimelineEvent(Integer.valueOf(mTimelineEventKey), mAddEventTitleET.getText().toString(),
+                        mAddEventDescriptionET.getText().toString(), "", "", mAddEventDateET.getText().toString(),
+                        mSelectedColor);
+
+                mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT)
+                        .child(mTimelineEventKey).setValue(timelineEvent);
+                uploadImage(mImageBitmap, false);
+                uploadImage(mBackdropBitmap, true);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        /*.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mTimelineEventKey = dataSnapshot.getChildrenCount() > 0 ? String.valueOf(Integer.valueOf(dataSnapshot.getKey()) + 1) : "0";
+                TimelineEvent timelineEvent = new TimelineEvent(mAddEventTitleET.getText().toString(),
+                        mAddEventDescriptionET.getText().toString(), "", "", mAddEventDateET.getText().toString(),
+                        mSelectedColor);
+
+                mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT)
+                        .child(String.valueOf(mTimelineEventKey))
+                        .setValue(timelineEvent);
+                mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT)
+                        .child(mTimelineEventKey).setValue(timelineEvent);
+                uploadImage(mImageBitmap, false);
+                uploadImage(mBackdropBitmap, true);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
     }
 
     @OnClick(R.id.add_event_cancel_button)
@@ -156,8 +201,29 @@ public class AddEventActivity extends AppCompatActivity {
         finish();
     }
 
-    @OnClick(R.id.add_event_image_select_iv)
-    public void onAddEventImageSelectClick() {
+    @OnClick(R.id.add_event_backdrop_select_marker_iv)
+    public void onAddEventBackdropSelectMarkerClick() {
+        mAddEventBackdropSelectIV.performClick();
+    }
+
+    @OnClick(R.id.add_event_color_picker_iv)
+    public void onAddEventColorPickerClick() {
+        mColorPicker.show();
+
+        Button okColor = (Button) mColorPicker.findViewById(R.id.okColorButton);
+        okColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSelectedColor = mColorPicker.getColor();
+                mColorPicker.dismiss();
+                mAddEventTitleET.setTextColor(mSelectedColor);
+                mAddEventDateET.setTextColor(mSelectedColor);
+            }
+        });
+    }
+
+    @OnClick({R.id.add_event_image_select_iv, R.id.add_event_backdrop_select_iv})
+    public void onAddEventImageSelectClick(View v) {
         mImageUri = Uri.fromFile(mFile);
 
         // Camera.
@@ -183,7 +249,8 @@ public class AddEventActivity extends AppCompatActivity {
         // Add the camera options.
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
-        startActivityForResult(chooserIntent, 10);
+        startActivityForResult(chooserIntent, v.getId() == R.id.add_event_image_select_iv
+                ? REQUEST_CODE_IMAGE_SELECT : REQUEST_CODE_BACKDROP_SELECT);
     }
 
     @Override
@@ -205,13 +272,50 @@ public class AddEventActivity extends AppCompatActivity {
                 Bitmap bp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                 Matrix rotateMatrix = new Matrix();
                 rotateMatrix.postRotate(90);
-                mImageBitmap = !isCamera ? bp : Bitmap.createBitmap(bp, 0, 0, bp.getWidth(),
-                        bp.getHeight(), rotateMatrix, false);
-                mAddEventImageSelectIV.setImageBitmap(mImageBitmap);
-                mAddEventImageSelectIV.setPadding(0, 0, 0, 0);
+                if (requestCode == REQUEST_CODE_IMAGE_SELECT) {
+                    mImageBitmap = !isCamera ? bp : Bitmap.createBitmap(bp, 0, 0, bp.getWidth(),
+                            bp.getHeight(), rotateMatrix, false);
+                    mAddEventImageSelectIV.setImageBitmap(mImageBitmap);
+                    mAddEventImageSelectIV.setPadding(0, 0, 0, 0);
+                    mAddEventImageSelectIV.setBorderWidth((int) Helper.dpToPixels(getApplicationContext(), 2));
+                    mAddEventImageSelectIV.setBorderColor(Color.BLACK);
+                } else {
+                    mBackdropBitmap = !isCamera ? bp : Bitmap.createBitmap(bp, 0, 0, bp.getWidth(),
+                            bp.getHeight(), rotateMatrix, false);
+                    mAddEventBackdropSelectIV.setImageBitmap(mBackdropBitmap);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void uploadImage(Bitmap bitmap, final boolean isBackdrop) {
+        if (bitmap != null) {
+            mStorageReference = mFirebaseStorage.getReference().child(Constants.SERVER_STORAGE_HIERARCHY.EVENT_PATH.EVENT)
+                    .child(isBackdrop ? Constants.SERVER_STORAGE_HIERARCHY.EVENT_PATH.IMAGE
+                            : Constants.SERVER_STORAGE_HIERARCHY.EVENT_PATH.BACKDROP)
+                    .child(mAddEventTitleET.getText().toString());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+            UploadTask uploadTask = mStorageReference.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: Unable to save " + (isBackdrop ? "image" : "backdrop"));
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String imageUrl = taskSnapshot.getDownloadUrl().toString();
+                    mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT)
+                            .child(mTimelineEventKey)
+                            .child(isBackdrop ? TimelineEvent.IMAGE_URL :
+                                    TimelineEvent.BACKDROP_URL)
+                            .setValue(imageUrl);
+                }
+            });
         }
     }
 

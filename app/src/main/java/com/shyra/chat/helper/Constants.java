@@ -12,20 +12,16 @@ public class Constants {
         int TIMELINE_RV_TOP_SPACING = 48;
     }
 
-    public interface DATABASE_HEADERS {
-        String TIMELINE_EVENT = "timelineEvent";
-    }
-
     public interface LOCAL_STORAGE_PATHS {
         String EVENT_IMAGE_PATH = Environment.getExternalStorageDirectory()
                 .getPath() + "/ShyRa/eventImages";
     }
 
     public interface SERVER_STORAGE_HIERARCHY {
-        String EVENT = "event";
-
-        public interface EVENT_PATH {
+        interface EVENT_PATH {
+            String EVENT = "event";
             String IMAGE = "image";
+            String BACKDROP = "backdrop";
         }
     }
 

@@ -10,24 +10,50 @@ import android.os.Parcelable;
 
 public class TimelineEvent implements Parcelable {
 
+    public static final String TIMELINE_EVENT = "timelineEvent";
+    public static final String TITLE = "title";
+    public static final String DESCRIPTION = "description";
+    public static final String IMAGE_URL = "imageUrl";
+    public static final String BACKDROP_URL = "backdropUrl";
+    public static final String DATE = "date";
+    public static final String COLOR = "color";
+
     private long id;
     private String title;
     private String description;
     private String imageUrl;
+    private String backdropUrl;
     private String date;
     private int color;
 
     public TimelineEvent() {
+        this.id = 0;
+        this.title = "";
+        this.description = "";
+        this.imageUrl = "";
+        this.backdropUrl = "";
+        this.date = "";
+        this.color = -16777216;
     }
 
-    public TimelineEvent(String title, String description, String imageUrl, String date, int color) {
+    public TimelineEvent(String title, String description, String imageUrl, String backdropUrl, String date, int color) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.backdropUrl = backdropUrl;
         this.date = date;
         this.color = color;
     }
 
+    public TimelineEvent(long id, String title, String description, String imageUrl, String backdropUrl, String date, int color) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.backdropUrl = backdropUrl;
+        this.date = date;
+        this.color = color;
+    }
 
     public long getId() {
         return id;
@@ -61,6 +87,14 @@ public class TimelineEvent implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
+    public String getBackdropUrl() {
+        return backdropUrl;
+    }
+
+    public void setBackdropUrl(String backdropUrl) {
+        this.backdropUrl = backdropUrl;
+    }
+
     public String getDate() {
         return date;
     }
@@ -82,6 +116,7 @@ public class TimelineEvent implements Parcelable {
         title = in.readString();
         description = in.readString();
         imageUrl = in.readString();
+        backdropUrl = in.readString();
         date = in.readString();
         color = in.readInt();
     }
@@ -97,6 +132,7 @@ public class TimelineEvent implements Parcelable {
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(imageUrl);
+        dest.writeString(backdropUrl);
         dest.writeString(date);
         dest.writeInt(color);
     }

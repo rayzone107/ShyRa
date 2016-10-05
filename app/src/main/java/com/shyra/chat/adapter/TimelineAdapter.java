@@ -110,13 +110,13 @@ public class TimelineAdapter extends FirebaseRecyclerAdapter<TimelineEvent, Time
             mTimelineEventContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(timelineEvent, mTimelineImageIV, mTimelineTitleTV);
+                    listener.onItemClick(timelineEvent, mTimelineImageIV);
                 }
             });
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(TimelineEvent timelineEvent, View mTimelineImageView, View mTimelineTitleView);
+        void onItemClick(TimelineEvent timelineEvent, View mTimelineImageView);
     }
 }

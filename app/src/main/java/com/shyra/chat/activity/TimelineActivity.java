@@ -81,9 +81,9 @@ public class TimelineActivity extends AppCompatActivity {
                 TimelineEvent.class,
                 R.layout.rv_timeline_row_left,
                 TimelineAdapter.TimelineHolder.class,
-                mFirebaseDatabaseReference.child(Constants.DATABASE_HEADERS.TIMELINE_EVENT), new TimelineAdapter.OnItemClickListener() {
+                mFirebaseDatabaseReference.child(TimelineEvent.TIMELINE_EVENT), new TimelineAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(TimelineEvent timelineEvent, View transitionImage, View transitionTitle) {
+            public void onItemClick(TimelineEvent timelineEvent, View transitionImage) {
                 Intent intent = new Intent(TimelineActivity.this, EventDetailActivity.class);
                 intent.putExtra(Constants.EXTRA.TIMELINE_EVENT, timelineEvent);
                 Pair<View, String> p1 = Pair.create(transitionImage, getString(R.string.transition_event_image));
@@ -106,6 +106,12 @@ public class TimelineActivity extends AppCompatActivity {
                         (positionStart >= (friendlyMessageCount - 1) && lastVisiblePosition == (positionStart - 1))) {
                     mTimelineRV.scrollToPosition(positionStart);
                 }
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                mFirebaseAdapter.notifyDataSetChanged();
             }
         });
 
